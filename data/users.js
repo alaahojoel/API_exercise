@@ -9,12 +9,13 @@ let users = [
 ];
 
 module.exports = {
-  addUser: (username, email, password) => {
+  addUser: (username, password) => {
     users.push({
-      id: listings.length + 1,
+      id: users.length + 1,
       username,
       password
     });
-  }
+  },
+  getAllUsers: () => users,
 
 }
