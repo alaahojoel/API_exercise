@@ -18,14 +18,12 @@ app.get("/", (req, res) => {
 
 app.post("/register", (req, res) => {
 
-  if("username" in req.body == false )
-  {
+  if("username" in req.body == false ){
     res.status(400);
     res.json({status: "Missing username from body"})
     return;
   }
-  if("password" in req.body == false )
-  {
+  if("password" in req.body == false ){
     res.status(400);
     res.json({status: "Missing password from body"})
     return;
@@ -54,12 +52,58 @@ app.get("/listings", (req, res) => {
     });
 });
 
+app.get("/listingsearch", (req, res) => {
+  const cat = listings.getListingsByCategory(req.body.category);
+  const loc = listings.getListingsByLocation(req.body.location);
+  const dat = listings.getListingsByDate(req.body.date);
+
+  if("category" in req.body == true ){
+    if(cat == null){
+      res.status(400).json({status: "Couldnt find listings from that category."});
+      return;
+    }
+    else{
+      res.json({
+        cat
+      });
+    }
+  }
+
+  if("location" in req.body == true ){
+    if(loc == null){
+      res.status(400).json({status: "Couldnt find listings from that location."});
+      return;
+    }
+    else{
+      res.json({
+        loc
+      });
+    }
+  }
+
+  if("date" in req.body == true ){
+    if(dat == ""){
+      res.status(400).json({status: "Couldnt find listings from that date."});
+      return;
+    }
+    else{
+      res.json({
+        dat
+      });
+    }
+  }
+
+  console.log("cat " + req.body.category);
+  console.log("loc " + req.body.location);
+  console.log("dat " + req.body.date);
+
+});
+
 app.post("/createListing", (req, res) => {
 
     const currentdate = new Date().toISOString();
 
-    if("title" in req.body == false )
-    {
+    if("title" in req.body == false ){
       res.status(400).json({status: "Missing title from body"})
       return;
     }

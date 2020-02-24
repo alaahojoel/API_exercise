@@ -30,6 +30,9 @@ module.exports = {
       userId
     });
   },
+  getListingsByCategory: (category) => listings.find(l => l.category == category),
+  getListingsByLocation: (location) => listings.find(l => l.location == location),
+  getListingsByDate: (date) => listings.find(l => l.date == date),
   getAllListings: () => listings,
   getAllUserlistings: (userId) => listings.filter(t => t.userId == userId),
   getListing: (listingId) => listings.find(t => t.id == listingId)
