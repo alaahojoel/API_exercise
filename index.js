@@ -37,19 +37,58 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/users", (req, res) => {
-    const everyuser = users.getAllUsers()
-    res.json({
-        everyuser
-    });
+  const everyuser = users.getAllUsers()
+  res.json({
+    everyuser
+  });
 });
 
 //------------ Listing calls ---------------------------//
 
 app.get("/listings", (req, res) => {
-    const everylisting = listings.getAllListings()
-    res.json({
-        everylisting
-    });
+  const everylisting = listings.getAllListings()
+  res.json({
+    everylisting
+  });
+});
+
+app.patch("/listings/:id", (req, res) => {
+  const edit = listings.getListing(req.params.id);
+  
+  const editUserId = edit.userId;
+
+  edit["seller"] = req.body.key;
+
+  /*if(editUserId == req.user.id){
+
+  }
+  else{
+    res.status(400).json({status: "This is not your post!!"});
+    return;
+  }*/
+
+  res.json({
+    edit
+  });
+});
+
+app.delete("/listings/:id", (req, res) => {
+  const del = listings.getListing(req.params.id);
+  
+  const editUserId = edit.userId;
+
+  if(editUserId == req.user.id){
+
+  }
+  else{
+    res.status(400).json({status: "This is not your post!!"});
+    return;
+  }
+
+  //const edit123 = listings.editListing(req.body);
+  res.json({
+    del
+  });
 });
 
 app.get("/listingsearch", (req, res) => {
@@ -82,7 +121,7 @@ app.get("/listingsearch", (req, res) => {
   }
 
   if("date" in req.body == true ){
-    if(dat == ""){
+    if(dat == null){
       res.status(400).json({status: "Couldnt find listings from that date."});
       return;
     }
@@ -101,17 +140,17 @@ app.get("/listingsearch", (req, res) => {
 
 app.post("/createListing", (req, res) => {
 
-    const currentdate = new Date().toISOString();
+  const currentdate = new Date().toISOString();
 
-    if("title" in req.body == false ){
-      res.status(400).json({status: "Missing title from body"})
-      return;
-    }
-    
-    console.log(req.body);
+  if("title" in req.body == false ){
+    res.status(400).json({status: "Missing title from body"})
+    return;
+  }
+  
+  console.log(req.body);
 
-    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.body.seller);
-    res.status(201).json({ status: "Listing created" });
+  listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.body.seller);
+  res.status(201).json({ status: "Listing created" });
 });
 
 app.listen(port, () => {
