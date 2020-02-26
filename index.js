@@ -144,6 +144,18 @@ app.get("/listings", (req, res) => {
   }
 });
 
+app.get("/listings/:id", (req, res) => {
+  const listingByID = listings.getListing(req.params.id)
+  if(listingByID == null || !listingByID){
+    res.status(400).json({status: "Couldnt find any listings for that ID."});
+  }
+  else{
+    res.status(201).json({
+      listingByID
+    });
+  }
+});
+
 app.patch("/listings/:id", (req, res) => {
   const edit = listings.getListing(req.params.id);
   
@@ -165,22 +177,24 @@ app.patch("/listings/:id", (req, res) => {
 });
 
 app.delete("/listings/:id", (req, res) => {
-  const del = listings.getListing(req.params.id);
+  const del = listings.delListing(req.params.id);
+  const listingUser = req.body.userId;
   
-  const editUserId = edit.userId;
+  /*const editUserId = edit.userId;*/
 
-  if(editUserId == req.user.id){
-
-  }
-  else{
+  if(listingUser == null || !listingUser) {
     res.status(400).json({status: "This is not your post!!"});
     return;
   }
+  else{
+    res.status(201).json({
+      del,
+      status: "Posting has been deleted!"
+    });
+  }
 
   //const edit123 = listings.editListing(req.body);
-  res.json({
-    del
-  });
+
 });
 
 app.get("/listingsearch", (req, res) => {

@@ -11,7 +11,20 @@ let listings = [
         delivery: "Shipping",
         seller: "tester",
         userId: 1
-    }
+    },
+    {
+      id: 2,
+      title: "test listing2",
+      description: "just a test2",
+      category: "testing",
+      location: "testland",
+      images: null,
+      price: 21,
+      date: "2020",
+      delivery: "Shipping",
+      seller: "tester",
+      userId: 1
+  }
 ];
 
 module.exports = {
@@ -35,5 +48,6 @@ module.exports = {
   getListingsByDate: (date) => listings.filter(l => l.date == date),
   getAllListings: () => listings,
   getAllUserlistings: (userId) => listings.filter(t => t.userId == userId),
-  getListing: (listingId) => listings.find(t => t.id == listingId)
+  getListing: (listingId) => listings.find(t => t.id == listingId),
+  delListing: (listingId) => listings.splice(listingId-1)
 }
