@@ -134,9 +134,14 @@ app.get("/users", (req, res) => {
 
 app.get("/listings", (req, res) => {
   const everylisting = listings.getAllListings()
-  res.json({
-    everylisting
-  });
+  if(everylisting.length == 0){
+    res.status(400).json({status: "Couldnt find any listings"});
+  }
+  else{
+    res.status(201).json({
+      everylisting
+    });
+  }
 });
 
 app.patch("/listings/:id", (req, res) => {
@@ -189,7 +194,7 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.json({
+      res.status(201).json({
         cat
       });
     }
@@ -201,7 +206,7 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.json({
+      res.status(201).json({
         loc
       });
     }
@@ -213,19 +218,14 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.json({
+      res.status(201).json({
         dat
       });
     }
   }
-
-  console.log("cat " + req.body.category);
-  console.log("loc " + req.body.location);
-  console.log("dat " + req.body.date);
-
 });
 
-app.post("/createListing", (req, res) => {
+app.post("/listings", (req, res) => {
 
   const currentdate = new Date().toISOString();
 
@@ -233,11 +233,39 @@ app.post("/createListing", (req, res) => {
     res.status(400).json({status: "Missing title from body"})
     return;
   }
-  
+  if("description" in req.body == false ){
+    res.status(400).json({status: "Missing description from body"})
+    return;
+  }
+  if("category" in req.body == false ){
+    res.status(400).json({status: "Missing category from body"})
+    return;
+  }
+  if("location" in req.body == false ){
+    res.status(400).json({status: "Missing location from body"})
+    return;
+  }
+  if("images" in req.body == false ){
+    res.status(400).json({status: "Missing images from body"})
+    return;
+  }
+  if("price" in req.body == false ){
+    res.status(400).json({status: "Missing price from body"})
+    return;
+  }
+  if("delivery" in req.body == false ){
+    res.status(400).json({status: "Missing delivery from body"})
+    return;
+  }
+  if("seller" in req.body == false ){
+    res.status(400).json({status: "Missing seller from body"})
+    return;
+  }
+  else{
+    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.body.seller);
+    res.status(201).json({ status: "Listing created" });
+  }
   console.log(req.body);
-
-  listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.body.seller);
-  res.status(201).json({ status: "Listing created" });
 });
 
 app.listen(port, () => {
