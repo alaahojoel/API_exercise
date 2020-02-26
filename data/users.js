@@ -17,5 +17,6 @@ module.exports = {
     });
   },
   getAllUsers: () => users,
+  getUserByName: (username) => users.find(u => u.username == username)
 
 }

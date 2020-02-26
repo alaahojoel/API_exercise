@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/Joqz/API_exercise#readme",
   "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
