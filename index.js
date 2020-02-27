@@ -124,12 +124,6 @@ app.post("/register", (req, res) => {
   res.status(201).json({ status: "created" });
 });
 
-app.get("/users", (req, res) => {
-  const everyuser = users.getAllUsers()
-  res.json({
-    everyuser
-  });
-});
 
 //------------ Listing calls ---------------------------//
 
@@ -199,7 +193,7 @@ app.get("/listingsearch", (req, res) => {
   const dat = listings.getListingsByDate(req.body.date);
 
   if("category" in req.body == true ){
-    if(cat == null){
+    if(cat == ""){
       res.status(400).json({status: "Couldnt find listings from that category."});
       return;
     }
@@ -211,7 +205,7 @@ app.get("/listingsearch", (req, res) => {
   }
 
   if("location" in req.body == true ){
-    if(loc == null){
+    if(loc == ""){
       res.status(400).json({status: "Couldnt find listings from that location."});
       return;
     }
@@ -223,7 +217,7 @@ app.get("/listingsearch", (req, res) => {
   }
 
   if("date" in req.body == true ){
-    if(dat == null){
+    if(dat == ""){
       res.status(400).json({status: "Couldnt find listings from that date."});
       return;
     }
