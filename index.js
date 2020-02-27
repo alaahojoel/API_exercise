@@ -79,7 +79,7 @@ app.get("/login", passport.authenticate("basic", { session: false }), (req, res)
   };
 
   const options = {
-    expiresIn: "60s"
+    expiresIn: "600s"
   }
 
   /* Sign the token with payload, key and options.
@@ -156,30 +156,28 @@ app.get("/listings/:id", (req, res) => {
   }
 });
 
-app.patch("/listings/:id", (req, res) => {
+app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const edit = listings.getListing(req.params.id);
-  
-  const editUserId = edit.userId;
+  const listingUser = req.user;
 
-  edit["seller"] = req.body.key;
-
-  /*if(editUserId == req.user.id){
-
-  }
-  else{
+  if(listingUser == null || !listingUser){
     res.status(400).json({status: "This is not your post!!"});
     return;
-  }*/
+  }
+  else{
+    res.status(201).json({
+      edit,
+      status: "Posting has been deleted!"
+    });
+  }
 
-  res.json({
-    edit
-  });
 });
 
+// This doesn't work and my brains don't comprihend why. - Ossi
 app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const del = listings.delListing(req.params.id);
   const listingUser = req.user;
-  
+
   if(listingUser == null || !listingUser) {
     res.status(400).json({status: "This is not your post!!"});
     return;

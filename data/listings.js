@@ -24,7 +24,21 @@ let listings = [
       delivery: "Shipping",
       seller: "tester",
       userId: 1
-  }
+  },
+  {
+    id: 3,
+    title: "test listing2",
+    description: "just a test2",
+    category: "testing",
+    location: "testland",
+    images: null,
+    price: 21,
+    date: "2020",
+    delivery: "Shipping",
+    seller: "tester",
+    userId: 1
+}
+  
 ];
 
 module.exports = {
