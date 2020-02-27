@@ -111,10 +111,6 @@ app.post("/register", (req, res) => {
   res.status(201).json({ status: "created" });
 });
 
-app.get("/users", (req, res) => {
-  const everyuser = users.getAllUsers()
-  res.status(200).json({ everyuser });
-});
 
 //------------ Listing calls ---------------------------//
 
