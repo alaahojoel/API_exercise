@@ -13,7 +13,6 @@ const jwt = require("jsonwebtoken");
 const BasicStrategy = require("passport-http").BasicStrategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const SecretKey = require("./data/jwt-key.json");
 const imageupload = require("./data/imageupload");
 
 app.use(bodyParser.json());

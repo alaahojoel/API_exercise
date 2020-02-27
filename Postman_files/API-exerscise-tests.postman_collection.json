@@ -1,0 +1,553 @@
+{
+	"info": {
+		"_postman_id": "215c8270-d967-47e6-aabd-26fddaac4d4f",
+		"name": "API-exerscise-tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/listings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0265065c-09d9-4279-80af-5382377a3c6a",
+						"exec": [
+							"pm.test(\"Status code is 200 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [],
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/listings",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listings/1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8dc81fba-8450-4e37-8f56-de538b179ee8",
+						"exec": [
+							"pm.test(\"Status code is 200 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/listings/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listings",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listings/foobar",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "29b3d9ef-6573-4890-b95a-1299eecb39a1",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"    ",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/listings/foobar",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listings",
+						"foobar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listingsearch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23211ea0-2011-45a6-94cc-0227a2ca9ece",
+						"exec": [
+							"pm.test(\"Status code is 200 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"category\": \"testing\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/listingsearch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listingsearch"
+					]
+				},
+				"description": "Tests category."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listingsearch Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23211ea0-2011-45a6-94cc-0227a2ca9ece",
+						"exec": [
+							"pm.test(\"Status code is 200 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"location\": \"testland\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/listingsearch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listingsearch"
+					]
+				},
+				"description": "Tests location."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listingsearch Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "23211ea0-2011-45a6-94cc-0227a2ca9ece",
+						"exec": [
+							"pm.test(\"Status code is 200 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"date\": \"2020\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/listingsearch",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listingsearch"
+					]
+				},
+				"description": "Tests date."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/listings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "59eebafe-53f1-45b6-be77-a0b2cd211b91",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"test listing\",\n\t\"description\": \"test item\",\n\t\"category\":\"test listing\",\n\t\"price\": 69,\n\t\"delivery\":\"Shipping\",\n\t\"seller\": \"tester\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/listings",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"listings"
+					]
+				},
+				"description": "Tests for 400 so that if information is missing."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "39ab5df3-7ed3-415e-8912-be13aa0aaa0e",
+						"exec": [
+							"pm.test(\"Status code is 201 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(201);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"Testusername\",\n\t\"password\":\"Testusername\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				},
+				"description": "User test registeration."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/register Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "39ab5df3-7ed3-415e-8912-be13aa0aaa0e",
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"Testusername\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"register"
+					]
+				},
+				"description": "If missing password we get negative result."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96cc5b70-f5d0-4f41-9192-6bfd49595f80",
+						"exec": [
+							"pm.test(\"Status code is 201 and has a JSON file with it\", function () {",
+							"    pm.response.to.have.status(201);",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "testpw",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "tester",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "Premaded user tests so that you can login."
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/login Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "96cc5b70-f5d0-4f41-9192-6bfd49595f80",
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "tester123",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "testpw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "Negative value for login"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
