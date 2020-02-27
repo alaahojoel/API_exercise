@@ -158,19 +158,35 @@ app.get("/listings/:id", (req, res) => {
 
 app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const edit = listings.getListing(req.params.id);
-  const listingUser = req.user;
 
-  if(listingUser == null || !listingUser){
-    res.status(400).json({status: "This is not your post!!"});
+  const currentUser = req.user;
+  const editUserId = edit.userId;
+
+  console.log("edit" + editUserId);
+  console.log("current" + currentUser.id);
+
+  if(currentUser.id !== editUserId){
+    res.status(401).json({status: "This is not your post!!"});
     return;
   }
   else{
-    res.status(201).json({
-      edit,
-      status: "Posting has been deleted!"
-    });
+    if( "title" in req.body == true ){
+      edit["title"] = req.body.title
+    }
+    if( "description" in req.body == true ){
+      edit["description"] = req.body.description
+    }
+    if( "category" in req.body == true ){
+      edit["category"] = req.body.category
+    }
+    if( "images" in req.body == true ){
+      edit["images"] = req.body.images
+    }
+    if( "delivery" in req.body == true ){
+      edit["delivery"] = req.body.delivery
+    }
   }
-
+  res.status(201).json({ edit });
 });
 
 // This doesn't work and my brains don't comprihend why. - Ossi
