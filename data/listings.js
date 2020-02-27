@@ -23,7 +23,7 @@ let listings = [
       date: "2020",
       delivery: "Shipping",
       seller: "tester",
-      userId: 1
+      userId: 2
   }
 ];
 

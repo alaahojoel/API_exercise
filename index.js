@@ -2,24 +2,21 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
-const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs");
-
 const listings = require("./data/listings");
 const users = require("./data/users");
+const SecretKey = require("./data/jwt-key.json");
 
+const bodyParser = require("body-parser");
+const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const BasicStrategy = require("passport-http").BasicStrategy;
 const jwt = require("jsonwebtoken");
+const BasicStrategy = require("passport-http").BasicStrategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
-const SecretKey = require("./data/jwt-key.json");
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => {
-    res.status(200).send("Just a test");
-  });
+//-------------------------------------- User registration and login ----------------------------------// 
 
 //Configuring the basic passport strategy to check if user credentials are correct
 passport.use(new BasicStrategy(
@@ -37,7 +34,6 @@ passport.use(new BasicStrategy(
       return done(null, false, { message: "Invalid password" });
     }
 
-    //If everything is correct, 
     return done(null, user);
   }
 ));
@@ -54,10 +50,6 @@ passport.use(new JwtStrategy(options, function(payload, done) {
   console.log("Processing JWT payload for token content:");
   console.log(payload);
 
-
-  /* Here you could do some processing based on the JWT payload.
-  For example check if the key is still valid based on expires property.
-  */
   const now = Date.now() / 1000;
   if(payload.exp > now) {
     done(null, payload.user);
@@ -82,9 +74,6 @@ app.get("/login", passport.authenticate("basic", { session: false }), (req, res)
     expiresIn: "60s"
   }
 
-  /* Sign the token with payload, key and options.
-      Detailed documentation of the signing here:
-      https://github.com/auth0/node-jsonwebtoken#readme */
   const token = jwt.sign(payload, SecretKey.secret, options);
 
   return res.json({ token });
@@ -99,9 +88,6 @@ app.get('/testJWT', passport.authenticate('jwt', { session: false }), (req, res)
     );
   }
 );
-
-
-//------------ User registration and login -------------//
 
 app.post("/register", (req, res) => {
 
@@ -125,9 +111,7 @@ app.post("/register", (req, res) => {
 
 app.get("/users", (req, res) => {
   const everyuser = users.getAllUsers()
-  res.json({
-    everyuser
-  });
+  res.status(200).json({ everyuser });
 });
 
 //------------ Listing calls ---------------------------//
@@ -138,9 +122,7 @@ app.get("/listings", (req, res) => {
     res.status(400).json({status: "Couldnt find any listings"});
   }
   else{
-    res.status(201).json({
-      everylisting
-    });
+    res.status(200).json({ everylisting });
   }
 });
 
@@ -150,30 +132,40 @@ app.get("/listings/:id", (req, res) => {
     res.status(400).json({status: "Couldnt find any listings for that ID."});
   }
   else{
-    res.status(201).json({
-      listingByID
-    });
+    res.status(200).json({ listingByID });
   }
 });
 
-app.patch("/listings/:id", (req, res) => {
+app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const edit = listings.getListing(req.params.id);
-  
+  const currentUser = req.user;
   const editUserId = edit.userId;
 
-  edit["seller"] = req.body.key;
+  console.log("edit" + editUserId);
+  console.log("current" + currentUser.id);
 
-  /*if(editUserId == req.user.id){
-
+  if(currentUser.id !== editUserId){
+    res.status(401).json({status: "This is not your post!!"});
+    return;
   }
   else{
-    res.status(400).json({status: "This is not your post!!"});
-    return;
-  }*/
-
-  res.json({
-    edit
-  });
+    if( "title" in req.body == true ){
+      edit["title"] = req.body.title
+    }
+    if( "description" in req.body == true ){
+      edit["description"] = req.body.description
+    }
+    if( "category" in req.body == true ){
+      edit["category"] = req.body.category
+    }
+    if( "images" in req.body == true ){
+      edit["images"] = req.body.images
+    }
+    if( "delivery" in req.body == true ){
+      edit["delivery"] = req.body.delivery
+    }
+  }
+  res.status(201).json({ edit });
 });
 
 app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -205,9 +197,7 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.status(201).json({
-        cat
-      });
+      res.status(200).json({ cat });
     }
   }
 
@@ -217,9 +207,7 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.status(201).json({
-        loc
-      });
+      res.status(200).json({ loc });
     }
   }
 
@@ -229,17 +217,17 @@ app.get("/listingsearch", (req, res) => {
       return;
     }
     else{
-      res.status(201).json({
-        dat
-      });
+      res.status(200).json({ dat });
     }
   }
 });
 
-app.post("/listings", (req, res) => {
+app.post("/listings", passport.authenticate('jwt', { session: false }), (req, res) => {
 
+  //Getting the current date and turning it to a string
   const currentdate = new Date().toISOString();
 
+  //Checking if everything is filled in the request
   if("title" in req.body == false ){
     res.status(400).json({status: "Missing title from body"})
     return;
@@ -268,17 +256,13 @@ app.post("/listings", (req, res) => {
     res.status(400).json({status: "Missing delivery from body"})
     return;
   }
-  if("seller" in req.body == false ){
-    res.status(400).json({status: "Missing seller from body"})
-    return;
-  }
   else{
-    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.body.seller);
+    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.user.username);
     res.status(201).json({ status: "Listing created" });
   }
   console.log(req.body);
 });
 
 app.listen(port, () => {
-    console.log(`Listening to requests on http://localhost:${port}`);
+    console.log("Listening to requests on http://localhost:${port}");
 });
