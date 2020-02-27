@@ -1,5 +1,3 @@
-const uuidv4 = require('uuid/v4');
-
 let users = [
   {
     id: 1,
@@ -8,7 +6,9 @@ let users = [
   }
 ];
 
+//Exporting some arrow functions to be used in the api methods
 module.exports = {
+  //Pushing a new user into the array
   addUser: (username, password) => {
     users.push({
       id: users.length + 1,
@@ -16,7 +16,11 @@ module.exports = {
       password
     });
   },
+
+  //Obvious
   getAllUsers: () => users,
+
+  //Getting user by their username
   getUserByName: (username) => users.find(u => u.username == username)
 
 }

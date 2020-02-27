@@ -20,8 +20,7 @@ app.use(bodyParser.json());
 //-------------------------------------- User registration and login ----------------------------------//
 
 //Configuring the basic passport strategy to check if user credentials are correct
-passport.use(new BasicStrategy(
-  function(username, password, done) {
+passport.use(new BasicStrategy(function(username, password, done) {
 
     const user = users.getUserByName(username);
 
@@ -55,13 +54,15 @@ passport.use(new JwtStrategy(options, function(payload, done) {
   if(payload.exp > now) {
     done(null, payload.user);
   }
-  else {// expired
+  else {
     done(null, false);
   }
 }));
 
+//Login method authenticated by basic strategy
 app.get("/login", passport.authenticate("basic", { session: false }), (req, res) => {
 
+  //Constructing payload for the token including user id and username
   const body = {
     id: req.user.id,
     username : req.user.username
@@ -71,48 +72,43 @@ app.get("/login", passport.authenticate("basic", { session: false }), (req, res)
     user : body
   };
 
+  //Constructing options for the token to use, this time only using expiration time
   const options = {
     expiresIn: "600s"
   }
 
+  //Constructing a JWT with payload, the secret key and the expiration time
   const token = jwt.sign(payload, SecretKey.secret, options);
 
   return res.status(201).json({ token });
 });
 
-app.get('/testJWT', passport.authenticate('jwt', { session: false }), (req, res) => {
-    res.json(
-      {
-        status: "It works!!!",
-        user: req.user
-      }
-    );
-  }
-);
-
+//Register method for users to create accounts
 app.post("/register", (req, res) => {
 
+  //Checking if the request body includes username
   if("username" in req.body == false ){
-    res.status(400);
-    res.json({status: "Missing username from body"})
+    res.status(400).json({status: "Missing username from body"})
     return;
   }
+  //Checking if the request body includes password
   if("password" in req.body == false ){
-    res.status(400);
-    res.json({status: "Missing password from body"})
+    res.status(400).json({status: "Missing password from body"})
     return;
   }
+  else{
+    //Hashing the input password using bcrypt
+    const hashedPassword = bcrypt.hashSync(req.body.password, 6);
+    users.addUser(req.body.username, hashedPassword);
 
-  const hashedPassword = bcrypt.hashSync(req.body.password, 6);
-  console.log(hashedPassword);
-  users.addUser(req.body.username, hashedPassword);
-
-  res.status(201).json({ status: "User created" });
+    res.status(201).json({ status: "User created" });
+  }
 });
 
 
-//------------ Listing calls ---------------------------//
+//------------------------------------------------ Listing calls ---------------------------------------//
 
+//Getting all the listings
 app.get("/listings", (req, res) => {
   const everylisting = listings.getAllListings()
   if(everylisting.length == 0){
@@ -123,6 +119,7 @@ app.get("/listings", (req, res) => {
   }
 });
 
+//Getting listings with a certain id
 app.get("/listings/:id", (req, res) => {
   const listingByID = listings.getListing(req.params.id)
   if(listingByID == null || !listingByID){
@@ -133,20 +130,20 @@ app.get("/listings/:id", (req, res) => {
   }
 });
 
+//Editing a listing with a certain id, authenticated by JWT
 app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const edit = listings.getListing(req.params.id);
 
   const currentUser = req.user;
   const editUserId = edit.userId;
 
-  console.log("edit" + editUserId);
-  console.log("current" + currentUser.id);
-
+  //Checking if users id matches the userid in the listing 
   if(currentUser.id !== editUserId){
     res.status(401).json({status: "This is not your post!!"});
     return;
   }
   else{
+    //Checking that which fields will be updated
     if( "title" in req.body == true ){
       edit["title"] = req.body.title
     }
@@ -184,11 +181,13 @@ app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (r
 
 });
 
+//Search for listings using categories, location or date
 app.get("/listingsearch", (req, res) => {
   const cat = listings.getListingsByCategory(req.body.category);
   const loc = listings.getListingsByLocation(req.body.location);
   const dat = listings.getListingsByDate(req.body.date);
 
+  //Checking that which search category was used
   if("category" in req.body == true ){
     if(cat == ""){
       res.status(400).json({status: "Couldnt find listings from that category."});
@@ -220,6 +219,7 @@ app.get("/listingsearch", (req, res) => {
   }
 });
 
+//Used to post listings, authenticated by JWT
 app.post("/listings", passport.authenticate('jwt', { session: false }), (req, res) => {
 
   //Getting the current date and turning it to a string
@@ -261,7 +261,7 @@ app.post("/listings", passport.authenticate('jwt', { session: false }), (req, re
   console.log(req.body);
 });
 
-//---------Image upload---------//
+//----------------------Image upload----------------------//
 
 app.use("/imageupload", imageupload);
 
