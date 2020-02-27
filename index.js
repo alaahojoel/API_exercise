@@ -176,12 +176,10 @@ app.patch("/listings/:id", (req, res) => {
   });
 });
 
-app.delete("/listings/:id", (req, res) => {
+app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const del = listings.delListing(req.params.id);
-  const listingUser = req.body.userId;
+  const listingUser = req.user;
   
-  /*const editUserId = edit.userId;*/
-
   if(listingUser == null || !listingUser) {
     res.status(400).json({status: "This is not your post!!"});
     return;
@@ -193,7 +191,6 @@ app.delete("/listings/:id", (req, res) => {
     });
   }
 
-  //const edit123 = listings.editListing(req.body);
 
 });
 
