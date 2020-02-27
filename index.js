@@ -78,7 +78,7 @@ app.get("/login", passport.authenticate("basic", { session: false }), (req, res)
 
   const token = jwt.sign(payload, SecretKey.secret, options);
 
-  return res.json({ token });
+  return res.status(201).json({ token });
 });
 
 app.get('/testJWT', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -108,7 +108,7 @@ app.post("/register", (req, res) => {
   console.log(hashedPassword);
   users.addUser(req.body.username, hashedPassword);
 
-  res.status(201).json({ status: "created" });
+  res.status(201).json({ status: "User created" });
 });
 
 
@@ -256,7 +256,7 @@ app.post("/listings", passport.authenticate('jwt', { session: false }), (req, re
     return;
   }
   else{
-    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.user.username);
+    listings.addListing(req.body.title, req.body.description, req.body.category, req.body.location, req.body.images, req.body.price, currentdate, req.body.delivery, req.user.username, req.user.id);
     res.status(201).json({ status: "Listing created" });
   }
   console.log(req.body);
