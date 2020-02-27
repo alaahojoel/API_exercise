@@ -14,6 +14,7 @@ const jwt = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const SecretKey = require("./data/jwt-key.json");
+const imageupload = require("./data/imageupload");
 
 app.use(bodyParser.json());
 
@@ -276,6 +277,10 @@ app.post("/listings", (req, res) => {
   }
   console.log(req.body);
 });
+
+//---------Image upload---------//
+
+app.use("/imageupload", imageupload);
 
 app.listen(port, () => {
     console.log(`Listening to requests on http://localhost:${port}`);
