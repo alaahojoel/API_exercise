@@ -71,7 +71,7 @@ app.get("/login", passport.authenticate("basic", { session: false }), (req, res)
   };
 
   const options = {
-    expiresIn: "60s"
+    expiresIn: "600s"
   }
 
   const token = jwt.sign(payload, SecretKey.secret, options);
@@ -138,6 +138,7 @@ app.get("/listings/:id", (req, res) => {
 
 app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const edit = listings.getListing(req.params.id);
+
   const currentUser = req.user;
   const editUserId = edit.userId;
 
@@ -166,12 +167,14 @@ app.patch("/listings/:id", passport.authenticate('jwt', { session: false }), (re
     }
   }
   res.status(201).json({ edit });
+
 });
 
+// This doesn't work and my brains don't comprihend why. - Ossi
 app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (req, res) => {
   const del = listings.delListing(req.params.id);
   const listingUser = req.user;
-  
+
   if(listingUser == null || !listingUser) {
     res.status(400).json({status: "This is not your post!!"});
     return;
@@ -182,7 +185,6 @@ app.delete("/listings/:id", passport.authenticate('jwt', { session: false }), (r
       status: "Posting has been deleted!"
     });
   }
-
 
 });
 
