@@ -13,10 +13,12 @@ const jwt = require("jsonwebtoken");
 const BasicStrategy = require("passport-http").BasicStrategy;
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
+const SecretKey = require("./data/jwt-key.json");
+const imageupload = require("./data/imageupload");
 
 app.use(bodyParser.json());
 
-//-------------------------------------- User registration and login ----------------------------------// 
+//-------------------------------------- User registration and login ----------------------------------//
 
 //Configuring the basic passport strategy to check if user credentials are correct
 passport.use(new BasicStrategy(
@@ -193,7 +195,7 @@ app.get("/listingsearch", (req, res) => {
   const dat = listings.getListingsByDate(req.body.date);
 
   if("category" in req.body == true ){
-    if(cat == null){
+    if(cat == ""){
       res.status(400).json({status: "Couldnt find listings from that category."});
       return;
     }
@@ -203,7 +205,7 @@ app.get("/listingsearch", (req, res) => {
   }
 
   if("location" in req.body == true ){
-    if(loc == null){
+    if(loc == ""){
       res.status(400).json({status: "Couldnt find listings from that location."});
       return;
     }
@@ -213,7 +215,7 @@ app.get("/listingsearch", (req, res) => {
   }
 
   if("date" in req.body == true ){
-    if(dat == null){
+    if(dat == ""){
       res.status(400).json({status: "Couldnt find listings from that date."});
       return;
     }
@@ -263,6 +265,10 @@ app.post("/listings", passport.authenticate('jwt', { session: false }), (req, re
   }
   console.log(req.body);
 });
+
+//---------Image upload---------//
+
+app.use("/imageupload", imageupload);
 
 app.listen(port, () => {
     console.log("Listening to requests on http://localhost:${port}");
